@@ -1,4 +1,4 @@
-# SRFI nnn: Title
+# SRFI nnn: Define higher-order lambda
 
 by Firstname Lastname, Another Person, Third Person
 
@@ -8,54 +8,71 @@ Early Draft
 
 # Abstract
 
-??? abstract, preferably shorter than 200 words. Please outline the
-need for, and design of, the proposal.
-
-# Issues
-
-??? Optional section that may point out things to be resolved. This
-will not appear in the final SRFI.
+This SRFI codifies the shorthand syntax (define ((_name_ _outer-args_
+...) _inner-args_ ...) _body_ ...) which some Scheme implementations
+have had for a long time.
 
 # Rationale
 
-??? detailed rationale. This should be 200-500 words long. Please
-explain why the proposal should be incorporated as a standard feature
-in Scheme implementations. List related standards and SRFIs, including
-dependencies, conflicts, and replacements. If there are other
-standards which this proposal will replace or with which it will
-compete, please explain why the present proposal is a substantial
-improvement.
+Procedures that return procedures are commonly useful in Scheme.
 
 ## Survey of prior art
 
-GitHub's version of Markdown can make tables. For example:
+Scheme implementations that have it:
 
-| System        | Procedure | Signature                 |
-| ------------- |:---------:| ------------------------- |
-| System A      | `jumble`  | _list_ _elem_             |
-| System B      | `bungle`  | _elem_ _list_             |
-| System C      | `frob`    | _list_ _elem_ _predicate_ |
+* Chicken
+* Gauche
+* Larceny
+* MIT Scheme
+* Racket
+* Sagittarius
+* Scheme 9 from Empty Space
+
+Scheme implementations that don't have it: Bigloo, BiwaScheme, Chez
+Scheme, Chibi-Scheme, Cyclone, Gambit, Gerbil, Guile, Ikarus,
+IronScheme, Kawa, Loko, Mosh, s7, Scheme 48, SigScheme, STklos,
+TinyScheme, Vicare, Ypsilon
 
 # Specification
 
-??? detailed specification. This should be detailed enough that a
-conforming implementation could be completely created from this
-description.
+The library `(srfi NNN)` exports a version of `define` that acts
+according to the following `syntax-rules` macro:
+
+    (define-syntax define
+      (syntax-rules ()
+
+        ((_ ((name args ... . tail) xargs ... . xtail) xbody ...)
+         (define/standard (name args ... . tail)
+           (lambda (xargs ... . xtail) xbody ...)))
+
+        ((_ ((name args ... . tail) xargs ...) xbody ...)
+         (define/standard (name args ... . tail)
+           (lambda (xargs ...) xbody ...)))
+
+        ((_ ((name args ...) xargs ... . xtail) xbody ...)
+         (define/standard (name args ...)
+           (lambda (xargs ... . xtail) xbody ...)))
+
+        ((_ ((name args ...) xargs ...) xbody ...)
+         (define/standard (name args ...)
+           (lambda (xargs ...) xbody ...)))
+
+        ((_ things ...)
+         (define/standard things ...))))
+
+where `define/standard` is the standard version of `define`.
 
 # Implementation
 
-??? explanation of how it meets the sample implementation requirement
-(see process), and the code, if possible, or a link to it Source for
-the sample implementation.
+Attached.
 
 # Acknowledgements
 
-??? Give credits where credits is due.
+Thanks to Arthur Gleckler for explaining the trick, and to Göran
+Weinholt for collaborating on Docker containers that made it easy to
+do the survey.
 
 # References
-
-??? Optional section with links to web pages, books and papers that
-helped design the SRFI.
 
 # Copyright
 
