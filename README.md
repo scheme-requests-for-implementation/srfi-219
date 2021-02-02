@@ -86,7 +86,7 @@ With a dotted list to take a variable number of arguments:
 
 # Implementation
 
-Attached.
+R6RS and R7RS libraries using `syntax-rules` are attached.
 
 # Acknowledgements
 
