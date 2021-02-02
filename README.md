@@ -62,6 +62,28 @@ according to the following `syntax-rules` macro:
 
 where `define/standard` is the standard version of `define`.
 
+# Examples
+
+Simplest example:
+
+```
+(define ((greet-with-prefix prefix) suffix)
+  (string-append prefix " " suffix))
+
+(define greet (greet-with-prefix "Hello"))
+
+(greet "there!") => "Hello there!"
+```
+
+With a dotted list to take a variable number of arguments:
+
+```
+(define ((append-to . b) . a)
+  (apply append (append b a)))
+
+((append-to '(1 2) '(3 4)) '(5 6) '(7 8)) => (1 2 3 4 5 6 7 8)
+```
+
 # Implementation
 
 Attached.
