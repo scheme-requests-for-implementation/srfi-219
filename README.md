@@ -2,21 +2,21 @@
 
 by Firstname Lastname, Another Person, Third Person
 
-# Status
+## Status
 
 Early Draft
 
-# Abstract
+## Abstract
 
 This SRFI codifies the shorthand syntax (define ((_name_ _outer-args_
 ...) _inner-args_ ...) _body_ ...) which some Scheme implementations
 have had for a long time.
 
-# Rationale
+## Rationale
 
 Procedures that return procedures are commonly useful in Scheme.
 
-## Survey of prior art
+### Survey of prior art
 
 Scheme implementations that have it:
 
@@ -33,7 +33,7 @@ Scheme, Chibi-Scheme, Cyclone, Gambit, Gerbil, Guile, Ikarus,
 IronScheme, Kawa, Loko, Mosh, s7, Scheme 48, SigScheme, STklos,
 TinyScheme, Vicare, Ypsilon
 
-# Specification
+## Specification
 
 The library `(srfi NNN)` exports a version of `define` that acts
 according to the following `syntax-rules` macro:
@@ -62,7 +62,7 @@ according to the following `syntax-rules` macro:
 
 where `define/standard` is the standard version of `define`.
 
-# Examples
+## Examples
 
 Simplest example:
 
@@ -84,19 +84,17 @@ With a dotted list to take a variable number of arguments:
 ((append-to '(1 2) '(3 4)) '(5 6) '(7 8)) => (1 2 3 4 5 6 7 8)
 ```
 
-# Implementation
+## Implementation
 
 R6RS and R7RS libraries using `syntax-rules` are attached.
 
-# Acknowledgements
+## Acknowledgements
 
 Thanks to Arthur Gleckler for explaining the trick, and to Göran
 Weinholt for collaborating on Docker containers that made it easy to
 do the survey.
 
-# References
-
-# Copyright
+## Copyright
 
 Copyright (C) Firstname Lastname (20XY).
 
