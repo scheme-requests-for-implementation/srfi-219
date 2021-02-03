@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SRFI nnn: Define higher-order lambda</title>
+  <link href="/favicon.png" rel="icon" sizes="192x192" type=
+  "image/png">
+  <link rel="stylesheet" href="https://srfi.schemers.org/srfi.css"
+  type="text/css">
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1">
+</head>
+<body>
+  <h1 id="srfi-nnn-define-higher-order-lambda">SRFI nnn: Define
+  higher-order lambda</h1>
+  <p>by Lassi Kortela</p>
+  <h2 id="status">Status</h2>
+  <p>Draft</p>
+  <h2 id="abstract">Abstract</h2>
+  <p>This SRFI codifies the following shorthand syntax, which some
+  Scheme implementations have had for a long time.</p>
+  <pre>(define ((outer-name outer-args ...) inner-args ...)
+  inner-body ...)</pre>
+  <h2 id="rationale">Rationale</h2>
+  <p>Procedures that make other procedures are commonly used in
+  Scheme. A shorthand syntax makes them easier to define, obviating
+  the need to write a lambda inside a lambda.</p>
+  <p>Recall that <em>R<sup>n</sup>RS</em> defines a standard
+  shorthand whereby the code:</p>
+  <pre>(define foo
+  (lambda (a b c)
+    body ...))</pre>
+  <p>can be abbreviated as:</p>
+  <pre>(define (foo a b c)
+  body ...)</pre>
+  <p>This SRFI defines an additional shorthand which is an
+  extrapolation of the standard one. The code:</p>
+  <pre>(define (foo a b c)
+  (lambda (d e f)
+    body ...))</pre>
+  <p>can be abbreviated as:</p>
+  <pre>(define ((foo a b c) d e f)
+  body ...)</pre>
+  <p>Apart from helping define higher-order functions, the
+  additional shorthand syntax partially applies to the task of
+  making partially applied functions in Scheme.</p>
+  <h3 id="survey-of-prior-art">Survey of prior art</h3>
+  <p>The following Scheme implementations have the shorthand syntax
+  built in:</p>
+  <ul>
+    <li>Chicken</li>
+    <li>Gauche</li>
+    <li>Larceny</li>
+    <li>MIT Scheme</li>
+    <li>Racket</li>
+    <li>Sagittarius</li>
+    <li>Scheme 9 from Empty Space</li>
+  </ul>
+  <p>The following implementations don't have it: Bigloo,
+  BiwaScheme, Chez Scheme, Chibi-Scheme, Cyclone, Gambit, Gerbil,
+  Guile, Ikarus, IronScheme, Kawa, Loko, Mosh, s7, Scheme 48,
+  SigScheme, STklos, TinyScheme, Vicare, Ypsilon.</p>
+  <h3 id="exporting-the-shorthand-from-a-library">Exporting the
+  shorthand from a library</h3>
+  <p>Since the shorthand is non-standard (i.e. not defined in
+  <em>R<sup>n</sup>RS</em>), it can be controversial or confusing
+  to the uninitiated programmer.</p>
+  <p>This SRFI handles the conflict by storing the shorthand
+  version of <code>define</code> in a library that does not have to
+  be imported by default. Then programmers can choose whether to
+  import it or not. In portable code the <code>import</code> serves
+  to document the dependency on this SRFI.</p>
+  <h2 id="specification">Specification</h2>
+  <p>The shorthand version of <code>define</code> behaves according
+  to the following <code>syntax-rules</code> macro:</p>
+  <pre>(define-syntax define
+  (syntax-rules ()
+
+    ((define ((name args ... . tail) xargs ... . xtail)
+       xbody ...)
+     (define/native (name args ... . tail)
+       (lambda (xargs ... . xtail)
+         xbody ...)))
+
+    ((define ((name args ... . tail) xargs ...)
+       xbody ...)
+     (define/native (name args ... . tail)
+       (lambda (xargs ...)
+         xbody ...)))
+
+    ((define ((name args ...) xargs ... . xtail)
+       xbody ...)
+     (define/native (name args ...)
+       (lambda (xargs ... . xtail)
+         xbody ...)))
+
+    ((define ((name args ...) xargs ...)
+       xbody ...)
+     (define/native (name args ...)
+       (lambda (xargs ...)
+         xbody ...)))
+
+    ((define other-things ...)
+     (define/native other-things ...))))</pre>
+  <p>where <code>define/native</code> is the implementation's
+  native version of <code>define</code>. The native
+  <code>define</code> can be equivalent to the <code>define</code>
+  from a <em>R<sup>n</sup>RS</em> report, or may have extensions to
+  <em>R<sup>n</sup>RS</em> <code>define</code>.</p>
+  <h3 id="importing-in-r6rs-and-r7rs">Importing in R<sup>6</sup>RS
+  and R<sup>7</sup>RS</h3>
+  <p>In R<sup>6</sup>RS Scheme implementations, the shorthand
+  version of <code>define</code> is exported from the library
+  <code>(srfi :NNN)</code>. In R<sup>7</sup>RS Scheme
+  implementations, it is exported from the library <code>(srfi
+  NNN)</code>.</p>
+  <p>The shorthand version of <code>define</code> is exported under
+  the name <code>define</code>, which means that it shadows
+  <em>R<sup>n</sup>RS</em> <code>define</code>.</p>
+  <h3 id="importing-from-other-libraries">Importing from other
+  libraries</h3>
+  <p>The shorthand <code>define</code> may also be imported from
+  libraries, possibly under other names.</p>
+  <h3 id="importing-by-default">Importing by default</h3>
+  <p>This SRFI does not say whether or not the shorthand
+  <code>define</code> is imported into the default interaction
+  environment.</p>
+  <h2 id="examples">Examples</h2>
+  <p>Simplest example:</p>
+  <pre>(define ((greet-with-prefix prefix) suffix)
+  (string-append prefix " " suffix))
+
+(define greet (greet-with-prefix "Hello"))
+
+(greet "there!") =&gt; "Hello there!"</pre>
+  <p>With a dotted list to take a variable number of arguments:</p>
+  <pre>(define ((append-to . a) . b)
+  (apply append (append a b)))
+
+((append-to)) =&gt; ()
+((append-to '(1 2) '(3 4)) '(5 6) '(7 8)) =&gt; (1 2 3 4 5 6 7 8)</pre>
+  <h3>Avoiding the name clash</h3>
+  <p>To avoid the name conflict between <em>R<sup>n</sup>RS</em>
+  <code>define</code> and this SRFI's <code>define</code>, a
+  program using this SRFI should import the
+  <em>R<sup>n</sup>RS</em> base library as:</p>
+  <ul>
+    <li>R<sup>6</sup>RS: <code>(import (except (rnrs)
+    define))</code></li>
+    <li>R<sup>7</sup>RS: <code>(import (except (scheme base)
+    define))</code></li>
+  </ul>
+  <p>Alternatively, Scheme's import renaming can be used to import
+  the shorthand <code>define</code> under a different name, in
+  which case the same program can alternate between using the
+  shorthand <code>define</code> and <em>R<sup>n</sup>RS</em>
+  <code>define</code>. For example:</p>
+  <ul>
+    <li>R<sup>6</sup>RS: <code>(import (rename (srfi :NNN) (define
+    define/higher)))</code></li>
+    <li>R<sup>7</sup>RS: <code>(import (rename (srfi NNN) (define
+    define/higher)))</code></li>
+  </ul>
+  <h2 id="implementation">Implementation</h2>
+  <p>R<sup>6</sup>RS and R<sup>7</sup>RS libraries using
+  <code>syntax-rules</code> are attached.</p>
+  <h2 id="acknowledgements">Acknowledgements</h2>
+  <p>Thanks to Arthur Gleckler for explaining the syntax, and to
+  Göran Weinholt for collaborating on Docker containers that made
+  it easy to do the survey.</p>
+  <h2 id="copyright">Copyright</h2>
+  <p>Copyright (C) Lassi Kortela (2021).</p>
+  <p>Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation
+  files (the "Software"), to deal in the Software without
+  restriction, including without limitation the rights to use,
+  copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the
+  Software is furnished to do so, subject to the following
+  conditions:</p>
+  <p>The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the
+  Software.</p>
+  <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+  KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+  WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE
+  AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+  OTHER DEALINGS IN THE SOFTWARE.</p>
+  <hr>
+  <address>
+    Editor: <a href=
+    "mailto:srfi-editors+at+srfi+dot+schemers+dot+org">Arthur A.
+    Gleckler</a>
+  </address>
+</body>
+</html>
