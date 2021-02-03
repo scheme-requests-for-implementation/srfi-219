@@ -128,17 +128,16 @@
   <code>(srfi :219)</code>. In R<sup>7</sup>RS Scheme
   implementations, it is exported from the library <code>(srfi
   219)</code>.</p>
-  <p>The shorthand version of <code>define</code> is exported under
-  the name <code>define</code>, which means that it shadows
-  <em>R<sup>n</sup>RS</em> <code>define</code>.</p>
+  <p>The shorthand is exported under the name <code>define</code>,
+  which means that it shadows <em>R<sup>n</sup>RS</em>
+  <code>define</code>.</p>
   <h3 id="importing-from-other-libraries">Importing from other
   libraries</h3>
-  <p>The shorthand <code>define</code> may also be imported from
-  libraries, possibly under other names.</p>
+  <p>The shorthand may also be imported from other libraries,
+  possibly under names other than <code>define</code>.</p>
   <h3 id="importing-by-default">Importing by default</h3>
-  <p>This SRFI does not say whether or not the shorthand
-  <code>define</code> is imported into the default interaction
-  environment.</p>
+  <p>This SRFI does not say whether or not the shorthand is
+  imported into the default interaction environment.</p>
   <h2 id="examples">Examples</h2>
   <p>Simplest example:</p>
   <pre>(define ((greet-with-prefix prefix) suffix)
