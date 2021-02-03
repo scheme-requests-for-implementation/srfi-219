@@ -55,6 +55,13 @@
   <p>can be abbreviated as:</p>
   <pre>(define ((foo a b c) d e f)
   body ...)</pre>
+  <p>The syntax is generalizes further: lambdas can be nested
+  arbitrarily deep by adding more nested lists. The key is that
+  each nested list always be at the <b>head position</b> of the
+  containing list. Each inner list adds one outer lambda; this
+  order is intuitive when reading the S-expression left-to-right.
+  The identifier at the head position of the innermost list becomes
+  the name of the definition.</p>
   <p>Apart from helping define higher-order functions, the
   additional shorthand syntax partially applies to the task of
   making partially applied functions in Scheme.</p>
@@ -96,33 +103,17 @@
   to the following <code>syntax-rules</code> macro:</p>
   <pre>(define-syntax define
   (syntax-rules ()
-
-    ((define ((name args ... . tail) xargs ... . xtail)
-       xbody ...)
-     (define/native (name args ... . tail)
-       (lambda (xargs ... . xtail)
-         xbody ...)))
-
-    ((define ((name args ... . tail) xargs ...)
-       xbody ...)
-     (define/native (name args ... . tail)
-       (lambda (xargs ...)
-         xbody ...)))
-
-    ((define ((name args ...) xargs ... . xtail)
-       xbody ...)
-     (define/native (name args ...)
-       (lambda (xargs ... . xtail)
-         xbody ...)))
-
-    ((define ((name args ...) xargs ...)
-       xbody ...)
-     (define/native (name args ...)
-       (lambda (xargs ...)
-         xbody ...)))
-
+    ((define (head . args) . body)
+     (pile-em-up head (lambda args . body)))
     ((define other-things ...)
      (define/native other-things ...))))</pre>
+  <p>using the following helper macro:</p>
+  <pre>(define-syntax pile-em-up
+  (syntax-rules ()
+    ((pile-em-up ((head . outer-args) . args) lam)
+     (pile-em-up (head . outer-args) (lambda args lam)))
+    ((pile-em-up (head . args) lam)
+     (define/native head (lambda args lam)))))</pre>
   <p>where <code>define/native</code> is the implementation's
   native version of <code>define</code>. The native
   <code>define</code> can be equivalent to the <code>define</code>
