@@ -1,4 +1,4 @@
-(library (srfi nnn)
+(library (srfi 219)
   (export define)
   (import (rename (rnrs base (6)) (define define/standard)))
   (define-syntax define

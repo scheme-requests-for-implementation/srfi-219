@@ -1,4 +1,4 @@
-(import (except (scheme base) define) (scheme write) (srfi nnn))
+(import (except (scheme base) define) (scheme write) (srfi 219))
 
 (define (disp . xs) (for-each display xs) (newline))
 

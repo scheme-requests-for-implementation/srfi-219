@@ -1,4 +1,4 @@
-(import (except (rnrs) define) (srfi nnn))
+(import (except (rnrs) define) (srfi 219))
 
 (define (disp . xs) (for-each display xs) (newline))
 

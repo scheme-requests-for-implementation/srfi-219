@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>SRFI nnn: Define higher-order lambda</title>
+  <title>SRFI 219: Define higher-order lambda</title>
   <link href="/favicon.png" rel="icon" sizes="192x192" type=
   "image/png">
   <link rel="stylesheet" href="https://srfi.schemers.org/srfi.css"
@@ -11,7 +11,7 @@
   "width=device-width, initial-scale=1">
 </head>
 <body>
-  <h1 id="srfi-nnn-define-higher-order-lambda">SRFI nnn: Define
+  <h1 id="srfi-219-define-higher-order-lambda">SRFI 219: Define
   higher-order lambda</h1>
   <p>by Lassi Kortela</p>
   <h2 id="status">Status</h2>
@@ -111,9 +111,9 @@
   and R<sup>7</sup>RS</h3>
   <p>In R<sup>6</sup>RS Scheme implementations, the shorthand
   version of <code>define</code> is exported from the library
-  <code>(srfi :NNN)</code>. In R<sup>7</sup>RS Scheme
+  <code>(srfi :219)</code>. In R<sup>7</sup>RS Scheme
   implementations, it is exported from the library <code>(srfi
-  NNN)</code>.</p>
+  219)</code>.</p>
   <p>The shorthand version of <code>define</code> is exported under
   the name <code>define</code>, which means that it shadows
   <em>R<sup>n</sup>RS</em> <code>define</code>.</p>
@@ -156,9 +156,9 @@
   shorthand <code>define</code> and <em>R<sup>n</sup>RS</em>
   <code>define</code>. For example:</p>
   <ul>
-    <li>R<sup>6</sup>RS: <code>(import (rename (srfi :NNN) (define
+    <li>R<sup>6</sup>RS: <code>(import (rename (srfi :219) (define
     define/higher)))</code></li>
-    <li>R<sup>7</sup>RS: <code>(import (rename (srfi NNN) (define
+    <li>R<sup>7</sup>RS: <code>(import (rename (srfi 219) (define
     define/higher)))</code></li>
   </ul>
   <h2 id="implementation">Implementation</h2>

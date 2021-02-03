@@ -1,4 +1,4 @@
-(define-library (srfi nnn)
+(define-library (srfi 219)
   (export define)
   (import (rename (scheme base) (define define/standard)))
   (begin
