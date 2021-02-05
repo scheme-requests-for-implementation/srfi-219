@@ -105,17 +105,12 @@
   to the following <code>syntax-rules</code> macro:</p>
   <pre>(define-syntax define
   (syntax-rules ()
+    ((define ((head . outer-args) . args) . body)
+     (define (head . outer-args) (lambda args . body)))
     ((define (head . args) . body)
-     (pile-em-up head (lambda args . body)))
-    ((define other-things ...)
-     (define/native other-things ...))))</pre>
-  <p>using the following helper macro:</p>
-  <pre>(define-syntax pile-em-up
-  (syntax-rules ()
-    ((pile-em-up ((head . outer-args) . args) lam)
-     (pile-em-up (head . outer-args) (lambda args lam)))
-    ((pile-em-up (head . args) lam)
-     (define/native head (lambda args lam)))))</pre>
+     (define head (lambda args . body)))
+    ((define head . body)
+     (define/native head . body))))</pre>
   <p>where <code>define/native</code> is the implementation's
   native version of <code>define</code>. The native
   <code>define</code> can be equivalent to the <code>define</code>
