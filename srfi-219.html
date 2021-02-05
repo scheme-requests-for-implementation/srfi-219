@@ -101,21 +101,31 @@
   import it or not. In portable code the <code>import</code> serves
   to document the dependency on this SRFI.</p>
   <h2 id="specification">Specification</h2>
-  <p>The shorthand version of <code>define</code> behaves according
-  to the following <code>syntax-rules</code> macro:</p>
-  <pre>(define-syntax define
-  (syntax-rules ()
-    ((define ((head . outer-args) . args) . body)
-     (define (head . outer-args) (lambda args . body)))
-    ((define (head . args) . body)
-     (define head (lambda args . body)))
-    ((define head . body)
-     (define/native head . body))))</pre>
-  <p>where <code>define/native</code> is the implementation's
-  native version of <code>define</code>. The native
-  <code>define</code> can be equivalent to the <code>define</code>
-  from a <em>R<sup>n</sup>RS</em> report, or may have extensions to
-  <em>R<sup>n</sup>RS</em> <code>define</code>.</p>
+  <p>The shorthand version of <code>define</code> behaves as
+  follows:</p>
+  <blockquote>
+    <p><code>(define symbol expr)</code><br>
+    defines <var>symbol</var> with the value<br>
+    <code>expr</code></p>
+    <p><code>(define (symbol . args) expr ...)</code><br>
+    defines <var>symbol</var> with the value<br>
+    <code>(lambda args expr ...)</code></p>
+    <p><code>(define ((symbol . args1) . args) expr ...)</code><br>
+    defines <var>symbol</var> with the value<br>
+    <code>(lambda args1 (lambda args expr ...))</code></p>
+    <p><code>(define (((symbol . args2) . args1) . args) expr
+    ...)</code><br>
+    defines <var>symbol</var> with the value<br>
+    <code>(lambda args2 (lambda args1 (lambda args expr
+    ...)))</code></p>
+    <p>and so on.</p>
+  </blockquote>
+  <h3 id="declarations">Declarations</h3>
+  <p>If the Scheme implementation supports attaching declarations
+  such as documentation strings or optimization settings to
+  procedures, any such declarations appearing in <code>expr
+  ...</code> can apply to the outer and/or inner
+  <code>lambda</code>s at the discretion of the implementation.</p>
   <h3 id="importing-in-r6rs-and-r7rs">Importing in R<sup>6</sup>RS
   and R<sup>7</sup>RS</h3>
   <p>In R<sup>6</sup>RS Scheme implementations, the shorthand
