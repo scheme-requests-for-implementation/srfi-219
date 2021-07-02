@@ -1,6 +1,6 @@
 (library (srfi :219)
   (export define)
-  (import (rename (rnrs base (6)) (define native-define)))
+  (import (rename (rnrs base) (define native-define)))
   (define-syntax define
     (syntax-rules ()
       ((define ((head . outer-args) . args) . body)
