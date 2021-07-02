@@ -1,6 +1,6 @@
 (define-library (srfi 219)
   (export define)
-  (import (rename (scheme base) (define define/native)))
+  (import (rename (scheme base) (define native-define)))
   (begin  (define-syntax define
             (syntax-rules ()
               ((define ((head . outer-args) . args) . body)
@@ -8,4 +8,4 @@
               ((define (head . args) . body)
                (define head (lambda args . body)))
               ((define head . body)
-               (define/native head . body))))))
+               (native-define head . body))))))
