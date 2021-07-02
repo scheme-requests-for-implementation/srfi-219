@@ -1,4 +1,4 @@
-(import (except (rnrs) define) (srfi 64) (srfi 219))
+(import (except (rnrs) define) (srfi :64) (srfi :219))
 
 (test-begin "srfi-219")
 
