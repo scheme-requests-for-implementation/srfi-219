@@ -5,7 +5,5 @@
     (syntax-rules ()
       ((define ((head . outer-args) . args) . body)
        (define (head . outer-args) (lambda args . body)))
-      ((define (head . args) . body)
-       (define head (lambda args . body)))
       ((define head . body)
        (native-define head . body)))))
