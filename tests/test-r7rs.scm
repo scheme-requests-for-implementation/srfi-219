@@ -3,9 +3,9 @@
 (test-begin "srfi-219")
 
 (let ()
-  (define ((greet/prefix prefix) suffix)
+  (define ((greet-with-prefix prefix) suffix)
     (string-append prefix " " suffix))
-  (let ((greet (greet/prefix "Hello")))
+  (let ((greet (greet-with-prefix "Hello")))
     (test-equal "Hello there!" (greet "there!"))))
 
 (let ()
