@@ -1,3 +1,6 @@
 *~
 work/
 *.log
+
+%3a*.sls
+:*.sls
