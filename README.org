@@ -10,7 +10,7 @@ This repository hosts [[https://srfi.schemers.org/srfi-219/][SRFI 219]]: Define 
 
 This SRFI is in /final/ status.
 
-See also [[https://srfi.schemers.org/srfi-201/][SRFI 201: Syntactic Extensions to the Core Scheme Bindings]].
+See also [[https://srfi.schemers.org/srfi-201/][SRFI 201: Syntactic Extensions to the Core Scheme Bindings]] and [[https://srfi.schemers.org/srfi-232/][SRFI 232: Flexible curried procedures]].
 
 The full documentation for this SRFI can be found in the [[https://srfi.schemers.org/srfi-219/srfi-219.html][SRFI Document]].
 
